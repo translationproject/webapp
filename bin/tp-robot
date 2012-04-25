@@ -173,9 +173,9 @@ a POT file all alone.  So, for this one, I'll go disturb him!
             abort_robot()
         if not (run.hints.domain and run.hints.version):
             run.reject(_("""\
-As file name you supplied '%s'.  In this %s.  The file name should look
+As file name you supplied '%(name)s'.  In this %(comment)s.  The file name should look
 like 'DOMAINNAME-VERSIONNUMBER.TEAMCODE.po' (all in lowercase).
-""") % (input_name, unknown_elements_comment()), "[ill-formatted file name]")
+""") % { 'name': input_name, 'comment': unknown_elements_comment()}, "[ill-formatted file name]")
             abort_robot()
         if not run.hints.team:
             run.reject(_("""\
@@ -254,9 +254,9 @@ a PO template file all alone.  So, for this one, I'll go disturb him!
         if ((to_user and (to_user != 'robot') and (to_user !='translation'))
             or (to_site and (to_site !='translationproject.org'))):
             run.submitter.write(_("""\
-Instead of using the old address <%s@%s> for PO file submissions,
+Instead of using the old address <%(user)s@%(site)s> for PO file submissions,
 please use my new address <robot@translationproject.org>.
-""") % (to_user, to_site))
+""") % { 'user': to_user, 'site': to_site} )
         # Clean up translator name.
         if run.translator_name:
             match = re.match('"(.+)"$', run.translator_name)
@@ -336,8 +336,8 @@ The PO title line seems to be missing.  The very first line of any PO
 file should start with '# ' followed by a one-line description of what
 the file is about.  The title line for this PO file could be:
 
-    # %s translation for %s.
-""") % (globals.team_language, run.hints.domain), "[no title header]")
+    # %(team)s translation for %(domain)s.
+""") % { 'team': globals.team_language, 'domain': run.hints.domain}, "[no title header]")
 
     def copyright(self, header):
         text = header['COPYRIGHT']
@@ -384,14 +384,14 @@ and so he could eventually change me (the robot) for handling such cases.
                     comment = ""
                     reason = "[Copyright not %s]" % author
                 run.reject(_("""\
-The POT copyright should be assigned to "%s".  So the copyright line
+The POT copyright should be assigned to "%(name)s".  So the copyright line
 should look like this:
 
-    # Copyright (C) YEAR %s
+    # Copyright (C) YEAR %(name)s
 
 Maybe there is some extra text or a superfluous period?  YEAR should
-normally be the year the last package version was published.  %s
-""") % (author, author, comment), reason)
+normally be the year the last package version was published.  %(comment)s
+""") % {'name': author, 'comment': comment}, reason)
         elif run.hints.domain and run.hints.domain.disclaim:
             if text:
                 comment = (_("""\
@@ -440,12 +440,12 @@ before the author lines, and should say exactly this:
             run.reject_nofill(_("""\
 The license line is not fully correct:
 
-    %s
+    %(license)s
 
 It should say exactly this, the final period included:
 
-    # This file is distributed under the same license as the %s package.
-""") % (header['LICENSE'], packagename), "[license line incorrect]")
+    # This file is distributed under the same license as the %(package)s package.
+""") % {'license': header['LICENSE'], 'package': packagename}, "[license line incorrect]")
 
     def last_author(self, header):
         match1 = re.search('.*; *(.*[^ ]) *<(.*)>.*?([0-9]*)$',
@@ -485,18 +485,18 @@ superfluous spaces, no name, a lacking comma, or a bad year.
         if last_name != run.translator_name:
             run.submitter.write(_("""\
 The last name in the author lines differs from the name in the header
-field.  The last author line mentions '%s', while the 'Last-Translator'
-field says '%s'.  Maybe the author lines are in the wrong order?  The
+field.  The last author line mentions '%(author)s', while the 'Last-Translator'
+field says '%(translator)s'.  Maybe the author lines are in the wrong order?  The
 expected order is chronological: the earliest translator first, and
 your own author line last.
-""") % (last_name.encode('utf-8'), run.translator_name.encode('utf-8')))
+""") % {'author': last_name.encode('utf-8'), 'translator': run.translator_name.encode('utf-8')})
         elif last_address != run.translator_address:
             run.submitter.write(_("""\
 Your submission contains contradicting addresses for you.  The last of
-the introductory author lines says <%s>, while the 'Last-Translator'
-field says <%s>.  Please arrange to have a single preferred address to
+the introductory author lines says <%(email1)s>, while the 'Last-Translator'
+field says <%(email2)s>.  Please arrange to have a single preferred address to
 reach you, and use it consistently in all your translation files.
-""") % (last_address, run.translator_address))
+""") % {'email1': last_address, 'email2': run.translator_address})
         elif last_year != datetime.date.today().strftime('%Y'):
             run.submitter.write(_("""\
 The final year (%s) given in the last author line (which should be yours)
@@ -512,18 +512,18 @@ the author lines: the earliest author first, the latest last.
             if match.group('dom') != run.hints.domain.name:
                 run.reject(_("""\
 The 'Project-Id-Version' field of your PO file says that the textual domain
-is '%s', instead of '%s' as the file name says.  They should be the same. 
+is '%(domain1)s', instead of '%(domain2)s' as the file name says.  They should be the same. 
 The 'Project-Id-Version' field should contain both the domain name and the
 version number.
-""") % (match.group('dom'), run.hints.domain),
+""") % { 'domain1': match.group('dom'), 'domain2': run.hints.domain},
                            "[domain in project-id conflicts with file name]")
             if match.group('ver') != run.hints.version.name:
                 run.reject(_("""\
 The 'Project-Id-Version' field of your file says the translation
-is meant for version '%s' of '%s', but the file name says it is for
-version '%s'.  Please adjust either the 'Project-Id-Version' field
+is meant for version '%(version1)s' of '%(domain)s', but the file name says it is for
+version '%(version2)s'.  Please adjust either the 'Project-Id-Version' field
 or the file name, whichever is appropriate.
-""") % (match.group('ver'), run.hints.domain.name, run.hints.version.name),
+""") % { 'version1': match.group('ver'), 'domain': run.hints.domain.name, 'version2': run.hints.version.name},
                            "[version in project-id conflicts with file name]")
         else:
             run.reject(_("""\
@@ -533,9 +533,9 @@ or is not formatted properly.  The line should look like:
     "Project-Id-Version: PACKAGE VERSION\\n"
 
 in which PACKAGE should be replaced by the textual domain of your
-translation, probably '%s' in this case, and VERSION by the appropriate
-version number, probably '%s'.
-""") % (run.hints.domain.name, run.hints.version.name),
+translation, probably '%(domain)s' in this case, and VERSION by the appropriate
+version number, probably '%(version)s'.
+""") % { 'domain': run.hints.domain.name, 'version': run.hints.version.name},
                        "[no project-id-version]")
 
     def both_dates(self, header):
@@ -576,9 +576,9 @@ while MM gives the number of zone minutes.
             pot_stamp = date['POT-Creation-Date']
             if time_to_same_zone(po_stamp) <= time_to_same_zone(pot_stamp):
                 run.reject(_("""\
-The PO revision date is '%s', which is older than the POT creation date,
-'%s'.  Please update the revision date field before submitting a PO file.
-""") % (date['PO-Revision-Date'], date['POT-Creation-Date']),
+The PO revision date is '%(POdate)s', which is older than the POT creation date,
+'%(POTdate)s'.  Please update the revision date field before submitting a PO file.
+""") % { 'POdate': date['PO-Revision-Date'], 'POTdate': date['POT-Creation-Date']},
                            "[revision date before creation date]")
 
     def last_translator(self, header):
@@ -590,8 +590,8 @@ The PO revision date is '%s', which is older than the POT creation date,
             if len(match.group(2)) != 1:
                 run.submitter.write(_("""\
 There is a slight formatting error.  In the 'Last-Translator' header line,
-please use no more than a single space between '%s' and '<%s>'.
-""") % (last_fullname.encode('utf-8'), last_address))
+please use no more than a single space between '%(name)s' and '<%(email)s>'.
+""") % { 'name': last_fullname.encode('utf-8'), 'email': last_address})
             if not run.translator_name:
                 run.translator_name = last_fullname
             if not run.translator_address:
@@ -601,39 +601,39 @@ please use no more than a single space between '%s' and '<%s>'.
                                                  last_fullname, last_address)
             except KeyError:
                 run.reject(_("""\
-According to my notes, %s is not a member of the %s team. 
-If you haven't joined the %s team yet, then write to the leader of
-your team (see %s/team/%s.html), or else to the project coordinators. 
+According to my notes, %(name)s is not a member of the %(lang)s team.
+If you haven't joined the %(lang)s team yet, then write to the leader of
+your team (see %(base)s/team/%(team)s.html), or else to the project coordinators. 
 If it is only a matter of spelling, then please tell the project
 coordinators about the possible alternatives.
-""") % (last_fullname.encode('utf-8'), _(globals.team_language),
-        _(globals.team_language), config.site_base, run.hints.team.code),
+""") % { 'name': last_fullname.encode('utf-8'), 'lang': _(globals.team_language),
+         'base': config.site_base, 'team': run.hints.team.code},
                            "[translator not in team]")
                 abort_robot()
             if last_address not in translator.mailto:
                 if last_address not in globals.reported_unknown:
                     run.reject(_("""\
-%s is the last translator of this PO file.  But according to my notes,
-<%s> is not a good address to reach that translator.  %s %s
-""") % (last_fullname.encode('utf-8'), last_address,
-        say_alias_list(translator.mailto), globals.unknown_address_insert),
+%(name)s is the last translator of this PO file.  But according to my notes,
+<%(email)s> is not a good address to reach that translator.  %(alias)s %(address)s
+""") % { 'name': last_fullname.encode('utf-8'), 'email': last_address,
+        'alias': say_alias_list(translator.mailto), 'address': globals.unknown_address_insert},
                            "[unknown address]")
                     globals.reported_unknown.append(last_address)
                     globals.unknown_address_insert = ''
             elif last_fullname != run.translator_name:
                 run.submitter.write(_("""\
-The header of your email says that you are '%s', while the
+The header of your email says that you are '%(name1)s', while the
 'Last-Translator' field of the PO file header says your name
-is '%s'.  If the difference is merely a spelling variation,
+is '%(name2)s'.  If the difference is merely a spelling variation,
 there is no problem.  As I expect you have most control over your
 PO files, I'll consider the second name as the most dependable.
-""") % (run.translator_name.encode('utf-8'), last_fullname.encode('utf-8')))
+""") % { 'name1': run.translator_name.encode('utf-8'), 'name2': last_fullname.encode('utf-8')})
             elif last_address != run.translator_address:
                 run.submitter.write(_("""\
-Your message was sent from '%s', but the 'Last-Translator' field in the
-PO file says that your email address is '%s'.  I assume that the latter
+Your message was sent from '%(email1)s', but the 'Last-Translator' field in the
+PO file says that your email address is '%(email2)s'.  I assume that the latter
 is correct.
-""") % (run.translator_address, last_address))
+""") % { 'email1': run.translator_address, 'email2': last_address})
             # Override email data with those found in PO file.
             run.translator_name = last_fullname
             run.translator_address = last_address
@@ -665,34 +665,34 @@ EMAIL@ADDRESS gives a way to reach that translator by email.
             if len(match.group(2)) > 1:
                 run.submitter.write(_("""\
 There is a slight formatting error.  In the 'Language-Team' header line,
-please use no more than a single space between '%s' and '<%s>'.
-""") % (maybe_language, maybe_mailto))
+please use no more than a single space between '%(name)s' and '<%(email)s>'.
+""") % { 'name': maybe_language, 'email': maybe_mailto})
             if maybe_language != globals.team_language:
                 run.reject(_("""\
-You wrote '%s' in the 'Language-Team' field of the PO file header, while
-I think it should have been '%s'.
-""") % (maybe_language, _(globals.team_language)), "[language-team incorrect]")
+You wrote '%(lang1)s' in the 'Language-Team' field of the PO file header, while
+I think it should have been '%(lang2)s'.
+""") % { 'lang1': maybe_language, 'lang2': _(globals.team_language)}, "[language-team incorrect]")
             if not globals.team_mailto:
                 run.reject(_("""\
 Each translation team should publish some mailing list address, meant
 to appear (between angular brackets) after the language name in the
 'Language-Team' field of the PO file header.  The Translation Project
-does not have such an address for the %s team.  You might already know
-some list dedicated to internationalisation efforts for %s, which may
+does not have such an address for the %(lang)s team.  You might already know
+some list dedicated to internationalisation efforts for %(lang)s, which may
 fit your needs.  In case you know none, waiting to get better organised,
 you might use the address of one of the team members, maybe yours if you
 are alone in the team!  In any case, please inform the translation
 coordinator of the address your team decides to use.
-""") % (_(globals.team_language), _(globals.team_language)),
+""") % { 'lang': _(globals.team_language)},
                            "[team address missing]")
             elif maybe_mailto != globals.team_mailto and \
                      maybe_mailto not in globals.team_mailtos:
                 run.reject_nofill(_("""\
 The 'Language-Team' field of the PO file header contains
-  <%s> as the team's
+  <%(email)s> as the team's
 email address, but the team's current address is
-  <%s>.
-""") % (maybe_mailto, globals.team_mailto), "[team address incorrect]")
+  <%(actual)s>.
+""") % {'email': maybe_mailto, 'actual': globals.team_mailto}, "[team address incorrect]")
         else:
             run.reject(_("""\
 The 'Language-Team' field was not found in your PO file header,
@@ -708,8 +708,8 @@ code for your language (not to be confused with country codes, which are
 a different standard).  If I had to write this line myself, right now,
 according to the information which is available to me, I would use:
 
-    "Language-Team: %s <%s>\\n"
-""") % (globals.team_language, globals.team_mailto), "[language team missing]")
+    "Language-Team: %(lang)s <%(email)s>\\n"
+""") % { 'lang': globals.team_language, 'email': globals.team_mailto}, "[language team missing]")
 
     def mime_fields(self, header):
         if header['mime-version'] != '1.0':
@@ -741,11 +741,11 @@ or is not formatted properly.  The line should be this one:
             charset = match.group(1)
             if string.lower(charset) not in map(string.lower, charsets):
                 run.reject(_("""\
-The 'Content-Type' field introduced an unusual character set '%s'.
+The 'Content-Type' field introduced an unusual character set '%(char)s'.
 If this is not an error, please merely inform the translation coordinator
-that '%s' be added to the list of acceptable charsets.
-This list currently holds: %s.
-""") % (charset, charset, say_list(_('or'), charsets)),
+that '%(char)s' be added to the list of acceptable charsets.
+This list currently holds: %(list)s.
+""") % { 'char': charset, 'list': say_list(_('or'), charsets)},
                            "[unknown charset in content-type]")
             run.po_charset = charset
         else:
@@ -764,10 +764,10 @@ where CHARSET should be the name of a character set, like one of %s.
             if cte not in encodings:        # FIXME: ignore case
                 run.reject(_("""\
 The 'Content-Transfer-Encoding' field introduced an unusual encoding
-'%s'.  If this is not an error, please inform the translation
-coordinator that '%s' be added to the list of acceptable charsets.
-This list currently holds: %s.
-""") % (cte, cte, say_list(_('and'), encodings)),
+'%(enc)s'.  If this is not an error, please inform the translation
+coordinator that '%(enc)s' be added to the list of acceptable charsets.
+This list currently holds: %(list)s.
+""") % {'enc': cte, 'list': say_list(_('and'), encodings)},
                            "[unknown content-transfer-encoding]")
         else:
             run.reject(_("""\
@@ -853,22 +853,22 @@ class CheckRegistry:
                                              run.translator_address)
         except KeyError:
             run.reject(_("""\
-According to my notes, you are not a member of the %s team. Or at least,
-you are not listed there under the name '%s'.  If this is only a matter
+According to my notes, you are not a member of the %(lang)s team. Or at least,
+you are not listed there under the name '%(name)s'.  If this is only a matter
 of spelling differences, then I need to know exactly which alternate
 spellings of your name you use.  Write to the translation coordinator
 and explain why you need several different names.  But it is usually
 best to avoid such variance, and stick to a single preferred spelling.
-""") % (_(globals.team_language), run.translator_name),
+""") % {'lang': _(globals.team_language), 'name': run.translator_name},
                        "[translator not found]")
             return
         if run.translator_address not in translator.mailto:
             if run.translator_address not in globals.reported_unknown:
                 run.reject(_("""\
-According to my notes, the address <%s> is not a valid way to reach you. 
-%s %s
-""") % (run.translator_address, say_alias_list(translator.mailto),
-        globals.unknown_address_insert),
+According to my notes, the address <%(email)s> is not a valid way to reach you. 
+%(mailto)s %(address))s
+""") % { 'email': run.translator_address, 'mailto': say_alias_list(translator.mailto),
+        'address': globals.unknown_address_insert},
                            "[translator address not in registry]")
                 globals.reported_unknown.append(run.translator_address)
                 globals.unknown_address_insert = ''

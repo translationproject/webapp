@@ -121,10 +121,10 @@ class Coordinator(Reporter):
             subject = 'reply_header(): %s' % e.__class__.__name__
         return _("""\
 From: Translation Project Robot <robot@translationproject.org>
-To: %s
-Subject: XXX: %s
-%s"""
-                 % (mailto, subject, self.mime_header()))
+To: %(to)s
+Subject: XXX: %(subject)s
+%(header)s"""
+                 % { 'to': mailto, 'subject': subject, 'header': self.mime_header()})
 
     def complete(self):
         if rejected and not dry:
@@ -169,10 +169,10 @@ class Submitter(Reporter):
         elif translator_address:
             header = (_("""\
 From: Translation Project Robot <robot@translationproject.org>
-To: "%s" <%s>
-Subject: Re: %s
-%s
-""") % (translator_name, translator_address, subject, self.mime_header()))
+To: "%(name)s" <%(email)s>
+Subject: Re: %(subject)s
+%(header)s
+""") % { 'name': translator_name, 'email': translator_address, 'subject': subject, 'header': self.mime_header()})
         else:
             header = None
 
