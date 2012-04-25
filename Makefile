@@ -84,7 +84,7 @@ $(extradir)/matrix.texi: $(sitedir)/PO-files/*
 	mv tmp-matrix.texi $(extradir)/matrix.texi
 	mv tmp-matrix.xml $(extradir)/matrix.xml
 
-install-test-system:
+install-test-system: 
 	if [ -s registry/registry.sgml ] ; then \
 	  echo "registry/registry.sgml already exists. not doing anything"; \
 	else \
@@ -108,6 +108,8 @@ install-test-system:
 	  bin/generate-static-pages -i;\
 	  bin/generate-static-pages -d;\
 	  bin/generate-static-pages -t;\
+	  $(MAKE) pot ;\
+	  cp lib/messages/tp-robot.pot $(sitedir)/POT-files/;\
 	  echo "...generated webpages";\
 	fi
 
