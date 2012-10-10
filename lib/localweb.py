@@ -57,14 +57,17 @@ class DomainIndex(htmlpage.Htmlpage):
               "coreutils, and bash.  After those: "
               "xdg-user-dirs, parts of libc and parts of util-linux-ng.  "
               "And then maybe aspell, dialog, diffutils, e2fsprogs, gawk, "
-              "kbd, make, psmisc, texinfo, wget, and xkeyboard-config. </p><br>")
-        write('  <table>\n'
+              "kbd, make, psmisc, texinfo, wget, and xkeyboard-config. </p><br>\n")
+        write('  <table id="domaintable">\n'
+              '   <thead>\n'
               '   <tr align=left>\n'
               '    <th>Domain</th>\n'
               '    <th>Current<br>version</th>\n'
               '    <th>Disclaimer<br>required</th>\n'
               '    <th>Reference</th>\n'
-              '   </tr>\n')
+              '   </tr>\n'
+              '   </thead>\n'
+              '   <tbody>\n')
         for domain in registry.domain_list():
             if domain.disclaim:
                 hue = "#ffe0e0"
@@ -89,7 +92,7 @@ class DomainIndex(htmlpage.Htmlpage):
             else:
                 write('    <td bgcolor="%s">--</td>\n' % hue)
             write('   </tr>\n')
-        write('  </table>\n')
+        write('  </tbody>\n  </table>\n')
         self.epilogue()
 
 def produce_domain_page(postats, name, output=None):
@@ -153,14 +156,17 @@ class DomainPage(htmlpage.Htmlpage):
             write('  </ul>\n')
         write('  <p>The following table lists (under <strong>Version</strong>) all the'
               ' PO files that are available for this domain:</p>\n'
-              '  <table class="tablesorter" name="stats-table" id="stats-table" >\n'
+              '  <table name="stats-table" id="stats-table">\n'
+              '   <thead>\n'
               '   <tr>\n'
               '    <th>Language</th>\n'
               '    <th>Code</th>\n'
               '    <th>Package version</th>\n'
               '    <th>Last translator</th>\n'
               '    <th>Translation Statistics</th>\n'
-              '   </tr>\n')
+              '   </tr>\n'
+              '   </thead>\n'
+              '   <tbody>\n')
         for team in registry.team_list():
             if team.code in domain.ext:
                 stats = get_extstats().get((domain.name, team.name))
@@ -186,7 +192,7 @@ class DomainPage(htmlpage.Htmlpage):
                       % (team.code, team.language, team.code, color, numbers))
             else:
                 build_language_cell(postats, write, team, domain)
-        write('  </table>\n')
+        write('  </tbody>\n  </table>\n')
         self.epilogue()
 
 def build_language_cell(postats, write, team, domain):
@@ -433,13 +439,16 @@ class TeamPage(htmlpage.Htmlpage):
         else:
             write(' to a <a href="mailto:coordinator@translationproject.org">'
                   'TP coordinator</a> to get it corrected.</p>\n')
-        write('  <table>\n'
+        write('  <table id="assignments">\n'
+              '  <thead>\n'
               '   <tr>\n'
               '    <th>Domain</th>\n'
               '    <th>Last<br>known<br>version</th>\n'
               '    <th>&nbsp;Translated&nbsp;</th>\n'
               '    <th>&nbsp;Assigned&nbsp;translator&nbsp;</th>\n'
-              '   </tr>\n')
+              '   </tr>\n'
+              '   </thead>\n'
+              '   <tbody>\n')
         # Construct the table of packages.
         for domain in registry.domain_list():
             if domain.disclaim:
@@ -526,7 +535,7 @@ class TeamPage(htmlpage.Htmlpage):
             else:
                 write('    <td></td>\n')
             write('   </tr>\n')
-        write('  </table>\n')
+        write('  </tbody>\n  </table>\n')
         self.epilogue()
 
 

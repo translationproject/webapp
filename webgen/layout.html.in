@@ -3,6 +3,7 @@
  <head>
   <title>%(page_title)s</title>
   <link rel="stylesheet" type="text/css" href="%(site_base)s/html/style.css" />
+  <meta charset="UTF-8">
   <meta name="keywords" content="translation, localization, po-file, gettext" />
   <meta name="description" content="The teams at translationproject.org translate applications into different languages." />
   <meta name="robots" content="index,follow">
@@ -70,5 +71,20 @@ INSERTION_POINT
   <footer>
    copyright 2012 translationproject.org
   </footer>
+  <script type="text/javascript" src="../html/jquery-min.js"></script>
+  <script type="text/javascript" src="../html/jquery.tablesorter.min.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function()
+    {
+        $("#domaintable").addClass('tablesorter');
+        $("#stats-table").addClass('tablesorter');
+        $("#assignments").addClass('tablesorter');
+        $("#domaintable").tablesorter();
+        $("#stats-table").tablesorter();
+        $("#assignments").tablesorter();
+    }
+  );
+  </script>
+
  </body>
 </html>
