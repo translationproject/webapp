@@ -34,12 +34,12 @@ simply `DOMAIN' (without a version number).  Each of these
 subdirectories contains symlinks of the form `LL.po', which link to the 
 most recent file for that language in the `PO-files/' directory.
 
-.* SVN
+.* Git
 
 The scripts that produce the web pages and drive the TP mailing robot 
-are accessible through a Subversion repository:
+are accessible through a Git repository and can be cloned and forked from:
 
-    http://svn.vrijschrift.org/tp-repo/TP/
+    https://github.com/translationproject/webapp
 
 Among its contents are the following files:
 

@@ -9,7 +9,7 @@
 
   <domain>tp-robot
    <ref>Home page<url>http://www.translationproject.org/
-   <ref>Project site<url>https://github.com/arunpersaud/TP-no-svn
+   <ref>Project site<url>https://github.com/translationproject/webapp
    <mailto>test1@localhost
    <disclaim>
    <url>ftp://example.org/
