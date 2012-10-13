@@ -531,7 +531,8 @@ class TeamPage(htmlpage.Htmlpage):
                       '    %s\n'
                       % (reference, numbers))
             else:
-                write('    <td colspan=2></td>\n')
+                write('    <td></td>\n')
+                write('    <td></td>\n')
             if assigned_domains.has_key(domain.name):
                 write('    <td class="left">%s</td>\n'
                       % translator_best_href(assigned_domains[domain.name]))
