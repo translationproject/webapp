@@ -60,7 +60,7 @@ class DomainIndex(htmlpage.Htmlpage):
               "kbd, make, psmisc, texinfo, wget, and xkeyboard-config. </p><br>\n")
         write('  <table id="domaintable">\n'
               '   <thead>\n'
-              '   <tr align=left>\n'
+              '   <tr class="left">\n'
               '    <th>Domain</th>\n'
               '    <th>Current<br>version</th>\n'
               '    <th>Disclaimer<br>required</th>\n'
@@ -70,27 +70,26 @@ class DomainIndex(htmlpage.Htmlpage):
               '   <tbody>\n')
         for domain in registry.domain_list():
             if domain.disclaim:
-                hue = "#ffe0e0"
+                myclass = "disclaim"
                 word = "Yes"
             else:
-                hue = "#e0ffe0"
+                myclass = "nodisclaim"
                 word = ""
-            write('   <tr>\n'
-                  '    <td bgcolor="%s"><a href="%s.html">%s</a></td>\n'
-                  % (hue, domain.name, domain.name))
+            write('   <tr class="{}">\n'.format(myclass)+
+                  '    <td><a href="{0}.html">{0}</a></td>\n'.format(domain.name))
             if len(postats) and postats.potstats.has_key(domain.name):
                 hints = registry.hints(postats.potstats[domain.name][0])
-                write('    <td bgcolor="%s"><a href="%s">%s</a></td>\n'
-                      % (hue, hints.template_url(), hints.version))
+                write('    <td><a href="%s">%s</a></td>\n'
+                      % (hints.template_url(), hints.version))
             else:
                 write('    <td>-</td>\n')
                 sys.stderr.write("  * No stats for '%s'\n" % domain.name)
-            write('<td bgcolor="%s">%s</td>' % (hue, word))
+            write('    <td>%s</td>\n' % (word))
             if domain.ref:
-                write('    <td bgcolor="%s"><a href="%s">%s</a></td>\n'
-                      % (hue, domain.ref[0][1], domain.ref[0][1]))
+                write('    <td><a href="%s">%s</a></td>\n'
+                      % (domain.ref[0][1], domain.ref[0][1]))
             else:
-                write('    <td bgcolor="%s">--</td>\n' % hue)
+                write('    <td">--</td>\n')
             write('   </tr>\n')
         write('  </tbody>\n  </table>\n')
         self.epilogue()
@@ -115,18 +114,20 @@ class DomainPage(htmlpage.Htmlpage):
                   ' for the <b><code>%s</code></b> textual domain.  More'
                   ' information about the package can be found here:</p>\n'
                   '  <table>\n'
+                  '  <thead>\n'
                   '   <tr>\n'
                   '    <th>Topic</th>\n'
                   '    <th>URL</th>\n'
                   '   </tr>\n'
+                  '  </thead>\n'
+                  '  <tbody>\n'
                   % domain.name)
             for ref in domain.ref:
                 write('   <tr>\n'
-                      '    <td>%s</td>\n'
-                      '    <td align=left><a href="%s">%s</a></td>\n'
-                      '   </tr>\n'
-                      % (ref[0], ref[1], ref[1]))
-            write('  </table>\n')
+                      '    <td>{0}</td>\n'.format(ref[0])+
+                      '    <td class="left"><a href="{0}">{0}</a></td>\n'.format(ref[1])+
+                      '   </tr>\n')
+            write('  </tbody>\n  </table>\n')
         if domain.note:
             write('  <ul>\n')
             for note in domain.note:
@@ -181,15 +182,14 @@ class DomainPage(htmlpage.Htmlpage):
                     numbers = "unknown"
                 if os.path.isfile('%s/%s/%s.po'
                                   % (config.last_path, domain.name, team.name)):
-                    color = "#f8d0f8"  # Magenta: external but file is present.
+                    myclass = "external-present"
                 else:
-                    color = "#e8e8e8"  # Grey: plain external.
+                    myclass = "external"
                 write('<tr>'
-                      '<td><a href="../team/%s.html">%s</a></td>'
-                      '<td>%s</td><td>--</td>'
-                      '<td><i>external</i></td>'
-                      '<td bgcolor="%s">%s</td></tr>\n'
-                      % (team.code, team.language, team.code, color, numbers))
+                      '<td><a href="../team/{0}.html">{1}</a></td>'.format(team.code, team.language)+
+                      '<td>{0}</td><td>--</td>'.format(team.code)+
+                      '<td class="{0}">external</td>'.format(myclass)+
+                      '<td class="{0}">{0}</td></tr>\n'.format(myclass,numbers))
             else:
                 build_language_cell(postats, write, team, domain)
         write('  </tbody>\n  </table>\n')
@@ -275,23 +275,25 @@ class TeamIndex(htmlpage.Htmlpage):
             return
         self.prologue("Translation teams", 'utf-8')
         write('  <table>\n'
-              '   <tr>\n'
-              '    <th>Language</th>\n'
-              '    <th>Code</th>\n'
-              '    <th>Team address</th>\n'
-              '   </tr>\n')
+              '  <thead>\n'
+              '    <tr>\n'
+              '     <th>Language</th>\n'
+              '     <th>Code</th>\n'
+              '     <th>Team address</th>\n'
+              '    </tr>\n'
+              '   </thead>\n'
+              '   <tbody>\n')
         for team in registry.team_list():
             write('   <tr>\n'
                   '    <td><a href="%s.html">%s</a></td>\n'
                   '    <td>%s</td>\n'
                   % (team.code, team.language, team.code))
             if team.mailto:
-                write('    <td><a href="mailto:%s">%s</a></td>\n'
-                      % (team.mailto[0], team.mailto[0]))
+                write('    <td><a href="mailto:{0}">{0}</a></td>\n'.format(team.mailto[0]))
             else:
                 write('    <td></td>\n')
             write('   </tr>\n')
-        write('  </table>\n')
+        write('  </tbody>\n  </table>\n')
         self.epilogue()
 
 def produce_team_page(postats, name, output=None):
@@ -360,27 +362,32 @@ class TeamPage(htmlpage.Htmlpage):
             write('  <p>You can get more information about the'
                   ' %s effort here:</p>\n'
                   '  <table>\n'
+                  '  <thead>\n'
                   '   <tr>\n'
                   '    <th>Topic</th>\n'
                   '    <th>URL</th>\n'
                   '   </tr>\n'
+                  '  </thead>\n'
+                  '  <tbody>\n'
                   % team.language)
             for ref in team.ref:
                 write('   <tr>\n'
-                      '    <td>%s</td>\n'
-                      '    <td align=left><a href="%s">%s</a></td>\n'
-                      '   </tr>\n'
-                      % (ref[0], ref[1], ref[1]))
-            write('  </table>\n')
+                      '    <td>{0}</td>\n'.format(ref[0])+
+                      '    <td class="left"><a href="{0}">{0}</a></td>\n'.format(ref[1])+
+                      '   </tr>\n')
+            write('  </tbody>\n  </table>\n')
         write('  <p>The %s team currently consists of'
               ' the following translators:</p>\n'
               '  <table>\n'
+              '   <thead>\n'
               '   <tr>\n'
               '    <th>Translator</th>\n'
               '    <th>Assignments</th>\n'
               '    <th>Disclaimed</th>\n'
               '    <th>Autosend</th>\n'
               '   </tr>\n'
+              '   </thead>\n'
+              '   <tbody>\n'
               % team.language)
         # Construct the table of translators.
         for name in team.translators:
@@ -395,8 +402,8 @@ class TeamPage(htmlpage.Htmlpage):
                                      % (domain.name, team.name))
                 assigned_domains[domain.name] = translator
                 domain_count = domain_count + 1
-            write('   <tr >\n'
-                  '    <td align=left>%s</td>\n'
+            write('   <tr>\n'
+                  '    <td class="left">%s</td>\n'
                   % translator_best_href(translator))
             if domain_count:
                 write('    <td>%d</td>\n' % domain_count)
@@ -413,7 +420,7 @@ class TeamPage(htmlpage.Htmlpage):
             else:
                 write('    <td>-</td>\n')
             write('   </tr>\n')
-        write('  </table>\n')
+        write('  </tbody>\n  </table>\n')
         write('  <p>The Autosend column is for translators who want the PO'
               ' file sent to them when a new POT file is added to the project'
               ' -- they don\'t want to fetch the PO file themselves, but'
@@ -440,25 +447,24 @@ class TeamPage(htmlpage.Htmlpage):
             write(' to a <a href="mailto:coordinator@translationproject.org">'
                   'TP coordinator</a> to get it corrected.</p>\n')
         write('  <table id="assignments">\n'
-              '  <thead>\n'
+              '   <thead>\n'
               '   <tr>\n'
               '    <th>Domain</th>\n'
               '    <th>Last<br>known<br>version</th>\n'
-              '    <th>&nbsp;Translated&nbsp;</th>\n'
-              '    <th>&nbsp;Assigned&nbsp;translator&nbsp;</th>\n'
+              '    <th>Translated</th>\n'
+              '    <th>Assigned translator</th>\n'
               '   </tr>\n'
               '   </thead>\n'
               '   <tbody>\n')
         # Construct the table of packages.
         for domain in registry.domain_list():
             if domain.disclaim:
-                hue = "#fff3f3"
+                myclass="disclaim"
             else:
-                hue = "#f3fff3"
-            write('   <tr>\n'
-                  '    <td align=left bgcolor="%s">'
-                  '<a href="../domain/%s.html">%s</a></td>\n'
-                  % (hue, domain.name, domain.name))
+                myclass="nodisclaim"
+            write('   <tr class="{0}">\n'.format(myclass)+
+                  '    <td class="left">'
+                  '<a href="../domain/{0}.html">{0}</a></td>\n'.format(domain.name))
             extstats = None
             file = '%s/%s/%s.po' % (config.last_path, domain.name, team.name)
             try:
@@ -527,10 +533,10 @@ class TeamPage(htmlpage.Htmlpage):
             else:
                 write('    <td colspan=2></td>\n')
             if assigned_domains.has_key(domain.name):
-                write('    <td align=left>%s</td>\n'
+                write('    <td class="left">%s</td>\n'
                       % translator_best_href(assigned_domains[domain.name]))
             elif team.code in domain.ext:
-                write('    <td bgcolor="#e8e8e8"><i>external</i></td>\n')
+                write('    <td class="external">external</td>\n')
                 extstats = get_extstats().get((domain.name, team.code))
             else:
                 write('    <td></td>\n')
