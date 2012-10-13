@@ -81,7 +81,10 @@ INSERTION_POINT
         $("#assignments").addClass('tablesorter');
         $("#domaintable").tablesorter();
         $("#stats-table").tablesorter();
-        $("#assignments").tablesorter();
+        $("#assignments").tablesorter({
+		headers: {
+     		3: { sorter: 'digit' } // should sort by number
+ 		}});
     }
   );
   </script>
