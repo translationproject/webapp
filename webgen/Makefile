@@ -7,7 +7,7 @@ ALLOUT_FILES = maintainers.all leaders.all translators.all \
                changes.all files.all robot.all software.all
 HTMA_FILES = $(ALLOUT_FILES:.all=.html)
 HTMH_FILES = welcome.html thanks.html whydisclaim.html
-CSS_FILES  = style.css
+CSS_FILES  = style.css jquery-min.js jquery.tablesorter.min.js desc.gif asc.gif bg.gif
 
 LAYOUT_DEPS = ../lib/config.py ../lib/htmlpage.py layout.html.in to-html.py
 
@@ -22,10 +22,10 @@ $(extradir):
 
 alloutfiles: $(htmldir) $(addprefix $(htmldir)/,$(HTMA_FILES))
 
-htmlfiles: $(htmldir) $(addprefix $(htmldir)/,$(HTMH_FILES)) 
+htmlfiles: $(htmldir) $(addprefix $(htmldir)/,$(HTMH_FILES))
 
 css: $(CSS_FILES)
-	cp $< $(htmldir)
+	for i in $(CSS_FILES); do cp $$i $(htmldir); done
 
 $(htmldir)/%.html: %.all $(LAYOUT_DEPS)
 	./to-html.py -C $(htmldir) $<

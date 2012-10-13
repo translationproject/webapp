@@ -486,11 +486,11 @@ def enhance(text, verbatim=0):
     text = string.replace(text, '\f', '')
     if verbatim:
         text = re.sub(
-            r'((mailto:|http://|ftp://)[-_.@~/a-zA-Z0-9]*[~/a-zA-Z0-9])',
+            r'((mailto:|http://|https://|ftp://)[-_.@~/a-zA-Z0-9]*[~/a-zA-Z0-9])',
             r'<a href="\1">\1</a>', text)
     else:
         text = re.sub(
-            r'((mailto:|http://|ftp://)([-_.@~/a-zA-Z0-9]*[~/a-zA-Z0-9]))',
+            r'((mailto:|http://|https://|ftp://)([-_.@~/a-zA-Z0-9]*[~/a-zA-Z0-9]))',
             r'<a href="\1">\3</a>', text)
     text = re.sub(
         (r'(^|[^-_%+./a-zA-Z0-9:])'
