@@ -157,7 +157,7 @@ class DomainPage(htmlpage.Htmlpage):
             write('  </ul>\n')
         write('  <p>The following table lists (under <strong>Version</strong>) all the'
               ' PO files that are available for this domain:</p>\n'
-              '  <table name="stats-table" id="stats-table">\n'
+              '  <table>\n'
               '   <thead>\n'
               '   <tr>\n'
               '    <th>Language</th>\n'
