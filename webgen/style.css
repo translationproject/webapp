@@ -98,6 +98,27 @@ div.graph {
   border: 0px solid black;
 }
 
+table .disclaim {
+ background-color: #ffe0e0;
+}
+table .nodisclaim {
+ background-color: #e0ffe0;
+}
+
+table .left {
+ text-align:left;
+}
+
+table .external {
+ background-color: #e8e8e8;
+ font-style:italic;
+}
+
+table .external-present {
+ background-color: #f8d0f8;
+ font-style:italic;
+}
+
 table .translated {
  background-color: green;
  position: absolute;
