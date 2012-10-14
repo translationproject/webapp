@@ -89,7 +89,7 @@ class DomainIndex(htmlpage.Htmlpage):
                 write('    <td><a href="%s">%s</a></td>\n'
                       % (domain.ref[0][1], domain.ref[0][1]))
             else:
-                write('    <td">--</td>\n')
+                write('    <td>--</td>\n')
             write('   </tr>\n')
         write('  </tbody>\n  </table>\n')
         self.epilogue()
@@ -157,7 +157,7 @@ class DomainPage(htmlpage.Htmlpage):
             write('  </ul>\n')
         write('  <p>The following table lists (under <strong>Version</strong>) all the'
               ' PO files that are available for this domain:</p>\n'
-              '  <table name="stats-table" id="stats-table">\n'
+              '  <table>\n'
               '   <thead>\n'
               '   <tr>\n'
               '    <th>Language</th>\n'
@@ -245,7 +245,7 @@ def build_language_cell(postats, write, team, domain):
                       % (scramble(email), translator))
             else:
                 write('    <td>%s</td>\n' % translator)
-            write('    <td bgcolor="%s"><span class="statpercent">%d%%</span> <span class="stattrans">%d</span> <span class="statfuzzy">%d</span> <span class="statun">%d</span> \n'
+            write('    <td class="%s"><span class="statpercent">%d%%</span> <span class="stattrans">%d</span> <span class="statfuzzy">%d</span> <span class="statun">%d</span> \n'
                   % (colorize(translated, total), 100*translated/total, translated, fuzzy, total-fuzzy-translated))
 
             T=100*translated/total
@@ -495,7 +495,7 @@ class TeamPage(htmlpage.Htmlpage):
                     fuzzy = postats[key][7]
                     total = tally
                     color = colorize(translated, tally)
-                    numbers = '    <td bgcolor="%s"><span class="statpercent">%d%%</span> <span class="stattrans">%d</span> <span class="statfuzzy">%d</span> <span class="statun">%d</span> \n' % (colorize(translated, total), 100*translated/total, translated, fuzzy, total-fuzzy-translated)
+                    numbers = '    <td class="%s"><span class="statpercent">%d%%</span> <span class="stattrans">%d</span> <span class="statfuzzy">%d</span> <span class="statun">%d</span> \n' % (colorize(translated, total), 100*translated/total, translated, fuzzy, total-fuzzy-translated)
 
                     T=100*translated/total
                     F=100*fuzzy/total
@@ -516,7 +516,7 @@ class TeamPage(htmlpage.Htmlpage):
                     translated=0
                     fuzzy=0
                     total=tally
-                    numbers = '    <td bgcolor="%s"><span class="statpercent">%d%%</span> <span class="stattrans">%d</span> <span class="statfuzzy">%d</span> <span class="statun">%d</span> \n' % (colorize(translated, total), 100*translated/total, translated, fuzzy, total-fuzzy-translated)
+                    numbers = '    <td class="%s"><span class="statpercent">%d%%</span> <span class="stattrans">%d</span> <span class="statfuzzy">%d</span> <span class="statun">%d</span> \n' % (colorize(translated, total), 100*translated/total, translated, fuzzy, total-fuzzy-translated)
 
                     T=100*translated/total
                     F=100*fuzzy/total
@@ -585,15 +585,13 @@ else:
         return str
 
 def scramble(email):
-    email = string.replace(email, "@", " (at) ")
-    email = string.replace(email, ".", " (dot) ")
+    email = string.replace(email, "@", "_at_")
+    email = string.replace(email, ".", "_dot_")
     return email
 
-palette = ['#ff7777', '#f7bf77', '#efdf77', '#efef8f',
-                      '#dfef77', '#bff777', '#77ff77']
 def colorize(translated, total):
     if total == 0:
-        return "#d7d7d7"
+        return "palette0"
     if translated > total:
-        return "#00f8f8"
-    return palette[6 * translated / total]
+        return "palette8"
+    return "palette{0}".format( (6*translated) / total)
