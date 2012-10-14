@@ -498,19 +498,19 @@ def enhance(text, verbatim=0):
         r'\1<a href="mailto:\2">\2</a>', text)
     if verbatim:
         text = re.sub(
-            r'_([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])_', r'_<i>\1</i>_', text)
+            r'_([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])_', r'_<em>\1</em>_', text)
         text = re.sub(
-            r'\*([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])\*', r'*<b>\1</b>*', text)
+            r'\*([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])\*', r'*<strong>\1</storng>*', text)
         text = re.sub(
-            r"`([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])'", r"`<tt><b>\1</b></tt>'",
+            r"`([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])'", r"`<strong class=\"mono\">\1</strong>'",
             text)
     else:
         text = re.sub(
-            r'_([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])_', r'<i>\1</i>', text)
+            r'_([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])_', r'<em>\1</em>', text)
         text = re.sub(
-            r'\*([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])\*', r'<b>\1</b>', text)
+            r'\*([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])\*', r'<strong>\1</strong>', text)
         text = re.sub(
-            r"`([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])'", r'<tt><b>\1</b></tt>', text)
+            r"`([-_@./a-zA-Z0-9]*[/a-zA-Z0-9])'", r'<strong class="mono">\1</strong>', text)
     return text
 
 def abort(message):

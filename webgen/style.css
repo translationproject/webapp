@@ -66,6 +66,10 @@ nav h3 {
  margin-left: 20em;
 }
 
+.mono {
+  font-family: "monospace";
+}
+
 .updated {
   float: left;
   font-size: smaller;
