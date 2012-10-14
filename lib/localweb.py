@@ -585,8 +585,8 @@ else:
         return str
 
 def scramble(email):
-    email = string.replace(email, "@", " (at) ")
-    email = string.replace(email, ".", " (dot) ")
+    email = string.replace(email, "@", "_at_")
+    email = string.replace(email, ".", "_dot_")
     return email
 
 palette = ['#ff7777', '#f7bf77', '#efdf77', '#efef8f',
