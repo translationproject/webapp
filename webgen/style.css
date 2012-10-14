@@ -170,3 +170,41 @@ table .untranslated {
     text-align:right
 }
 
+
+/* first two are special cases*/
+.palette0 {
+  background-color: #d7d7d7;
+}
+.palette8 {
+  background-color: #00f8f8;
+}
+
+
+.palette1 {
+  background-color: #ff7777;
+}
+
+.palette2 {
+  background-color: #f7bf77;
+}
+
+.palette3 {
+  background-color: #efdf77;
+}
+
+.palette4 {
+  background-color: #efef8f;
+}
+
+.palette5 {
+  background-color: #dfef77;
+}
+
+.palette6 {
+  background-color: #bff777;
+}
+
+.palette7 {
+  background-color: #77ff77;
+}
+
