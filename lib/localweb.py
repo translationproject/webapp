@@ -89,7 +89,7 @@ class DomainIndex(htmlpage.Htmlpage):
                 write('    <td><a href="%s">%s</a></td>\n'
                       % (domain.ref[0][1], domain.ref[0][1]))
             else:
-                write('    <td">--</td>\n')
+                write('    <td>--</td>\n')
             write('   </tr>\n')
         write('  </tbody>\n  </table>\n')
         self.epilogue()
