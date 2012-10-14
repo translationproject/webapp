@@ -83,7 +83,7 @@ INSERTION_POINT
         $("#stats-table").tablesorter();
         $("#assignments").tablesorter({
 		headers: {
-     		3: { sorter: 'digit' } // should sort by number
+		2: { sorter: 'digit' } // should sort by number
  		}});
     }
   );
