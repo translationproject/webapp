@@ -7,7 +7,7 @@ ALLOUT_FILES = maintainers.all leaders.all translators.all \
                changes.all files.all robot.all software.all
 HTMA_FILES = $(ALLOUT_FILES:.all=.html)
 HTMH_FILES = welcome.html thanks.html whydisclaim.html
-CSS_FILES  = css/style.less css/desc.gif css/asc.gif css/bg.gif
+CSS_FILES  = css/style.less css/desc.gif css/asc.gif css/bg.gif css/bootstrap.less $(wildcard css/bootstrap/*.less)
 JS_FILES   = js/jquery-min.js js/jquery.tablesorter.min.js js/less.min.js js/layout.js
 
 LAYOUT_DEPS = ../lib/config.py ../lib/htmlpage.py layout.html.in to-html.py
@@ -34,6 +34,9 @@ js: $(sitedir) $(addprefix $(sitedir)/,$(JS_FILES))
 $(sitedir)/css/%.css: css/%.css
 	cp $< $@
 $(sitedir)/css/%.less: css/%.less
+	cp $< $@
+$(sitedir)/css/bootstrap/%.less: css/bootstrap/%.less
+	@mkdir -p $(sitedir)/css/bootstrap/
 	cp $< $@
 $(sitedir)/css/%.gif: css/%.gif
 	cp $< $@

@@ -3,6 +3,7 @@
  <head>
   <title>%(page_title)s</title>
   <link rel="stylesheet/less" type="text/css" href="%(site_base)s/css/style.less" />
+  <link rel="stylesheet/less" type="text/css" href="%(site_base)s/css/bootstrap.less" />
   <script src="%(site_base)s/js/less.min.js" type="text/javascript"></script>
   <meta charset="UTF-8">
   <meta name="keywords" content="translation, localization, po-file, gettext" />
@@ -13,9 +14,10 @@
  <body>
 
    <header>
-      <h1>Translation Project</h1>
+      <h1>Translation Project <small>translators of free (open-source) software</small></h1>
    </header>
 
+   <div class="everything">
    <nav>
      <ul>
         <li>
@@ -63,17 +65,20 @@
 
    <div class="main">
 INSERTION_POINT
-   <p class="updated">(Last updated on %(time_stamp)s.)</p>
+     <p class="updated">(Last updated on %(time_stamp)s.)</p>
    </div>
+  </div>
+
+  <footer>
+   copyright 2012 translationproject.org
 
    <p class="comments"> Your <a href="mailto:comments@translationproject.org">comments</a>
        are welcome.</p>
 
-  <footer>
-   copyright 2012 translationproject.org
   </footer>
   <script type="text/javascript" src="../js/jquery-min.js"></script>
   <script type="text/javascript" src="../js/jquery.tablesorter.min.js"></script>
+  <script type="text/javascript" src="../js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../js/layout.js"> </script>
 
  </body>
