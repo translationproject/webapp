@@ -8,7 +8,7 @@ ALLOUT_FILES = maintainers.all leaders.all translators.all \
 HTMA_FILES = $(ALLOUT_FILES:.all=.html)
 HTMH_FILES = welcome.html thanks.html whydisclaim.html
 CSS_FILES  = css/style.less css/desc.gif css/asc.gif css/bg.gif
-JS_FILES   = js/jquery-min.js js/jquery.tablesorter.min.js js/less.min.js
+JS_FILES   = js/jquery-min.js js/jquery.tablesorter.min.js js/less.min.js js/layout.js
 
 LAYOUT_DEPS = ../lib/config.py ../lib/htmlpage.py layout.html.in to-html.py
 

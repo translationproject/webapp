@@ -74,19 +74,7 @@ INSERTION_POINT
   </footer>
   <script type="text/javascript" src="../js/jquery-min.js"></script>
   <script type="text/javascript" src="../js/jquery.tablesorter.min.js"></script>
-  <script type="text/javascript">
-  $(document).ready(function()
-    {
-        $("#domaintable").addClass('tablesorter');
-        $("#assignments").addClass('tablesorter');
-        $("#domaintable").tablesorter();
-        $("#assignments").tablesorter({
-		headers: {
-		2: { sorter: 'digit' } // should sort by number
- 		}});
-    }
-  );
-  </script>
+  <script type="text/javascript" src="../js/layout.js"> </script>
 
  </body>
 </html>
