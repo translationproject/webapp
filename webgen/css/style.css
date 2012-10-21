@@ -7,17 +7,17 @@
 
 /* styles for tablesorter */
 table.tablesorter thead tr .header {
-	background-image: url(bg.gif);
+	background-image: url(../css/bg.gif);
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
 	padding-right: 20px;
 }
 table.tablesorter thead tr .headerSortUp {
-	background-image: url(asc.gif);
+	background-image: url(../css/asc.gif);
 }
 table.tablesorter thead tr .headerSortDown {
-	background-image: url(desc.gif);
+	background-image: url(../css/desc.gif);
 }
 
 

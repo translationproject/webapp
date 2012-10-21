@@ -7,14 +7,17 @@ ALLOUT_FILES = maintainers.all leaders.all translators.all \
                changes.all files.all robot.all software.all
 HTMA_FILES = $(ALLOUT_FILES:.all=.html)
 HTMH_FILES = welcome.html thanks.html whydisclaim.html
-CSS_FILES  = style.css jquery-min.js jquery.tablesorter.min.js desc.gif asc.gif bg.gif
+CSS_FILES  = css/style.css css/desc.gif css/asc.gif css/bg.gif
+JS_FILES   = js/jquery-min.js js/jquery.tablesorter.min.js
 
 LAYOUT_DEPS = ../lib/config.py ../lib/htmlpage.py layout.html.in to-html.py
 
 
-all: alloutfiles htmlfiles css\
+all: alloutfiles htmlfiles css js\
      $(sitedir)/disclaim.txt $(htmldir) $(htmldir)/authors.html $(extradir) $(extradir)/sendpo.sh
 
+$(sitedir):
+	mkdir -p $@
 $(htmldir):
 	mkdir -p $@
 $(extradir):
@@ -24,8 +27,16 @@ alloutfiles: $(htmldir) $(addprefix $(htmldir)/,$(HTMA_FILES))
 
 htmlfiles: $(htmldir) $(addprefix $(htmldir)/,$(HTMH_FILES))
 
-css: $(CSS_FILES)
-	for i in $(CSS_FILES); do cp $$i $(htmldir); done
+css: $(sitedir) $(addprefix $(sitedir)/,$(CSS_FILES))
+
+js: $(sitedir) $(addprefix $(sitedir)/,$(JS_FILES))
+
+$(sitedir)/css/%.css: css/%.css
+	cp $< $@
+$(sitedir)/css/%.gif: css/%.gif
+	cp $< $@
+$(sitedir)/js/%.js: js/%.js
+	cp $< $@
 
 $(htmldir)/%.html: %.all $(LAYOUT_DEPS)
 	./to-html.py -C $(htmldir) $<
