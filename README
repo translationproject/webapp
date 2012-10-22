@@ -116,11 +116,20 @@ htmldir  = $(sitedir)/html
 extradir = $(sitedir)/extra
 cachedir = $(sitedir)/cache
 
-also edit the file lib/config.py (TODO: be more clear about this).
+also edit the file lib/config.py, so that home_path, progs_path,
+site_base, cache_path, site_path, temp_path point to the corecct
+directories. Progs_path should point to the top-leve git-directory.
 
 then run
+
 make install-test-system
+make site
 
 This will create all necessary files. You can edit
 registry/registry.sgml and registry/AUTHORS now to turn this into a
 "real" installation.
+
+If you want to recreate the site, you need to remove
+registry/registry.sgml. An easy way of doing this is by calling "git
+clean -fdx" to remove all files not registered in git. After this you
+will need to rerun the two call to make.

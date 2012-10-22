@@ -84,8 +84,8 @@ $(extradir)/matrix.texi: $(sitedir)/PO-files/*
 	mv tmp-matrix.texi $(extradir)/matrix.texi
 	mv tmp-matrix.xml $(extradir)/matrix.xml
 
-install-test-system: 
-	if [ -s registry/registry.sgml ] ; then \
+install-test-directories:
+	@if [ -s registry/registry.sgml ] ; then \
 	  echo "registry/registry.sgml already exists. not doing anything"; \
 	else \
 	  echo "generating a dummy install for testing purposes only"; \
@@ -98,6 +98,8 @@ install-test-system:
 	  mkdir -p $(sitedir)/PO-files/{de,fi,fr,ga,hu,nl,pa,ru,vi,wa,zh_CN,zh_TW};\
 	  mkdir -p $(sitedir)/domain;\
 	  mkdir -p $(sitedir)/team;\
+	  mkdir -p $(sitedir)/js;\
+	  mkdir -p $(sitedir)/css;\
 	  for j in lib/messages/*po; do\
 	    i=`basename $$j`;\
 	    cp $$j $(sitedir)/PO-files/$${i%.po}/tp-robot-1.0.$$i;\
@@ -112,6 +114,8 @@ install-test-system:
 	  cp lib/messages/tp-robot.pot $(sitedir)/POT-files/;\
 	  echo "...generated webpages";\
 	fi
+
+install-test-system: | install-test-directories site
 
 .PHONY:	pot
 pot:
